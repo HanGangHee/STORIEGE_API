@@ -1,0 +1,29 @@
+{
+  "name": "storiege_api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./node_modules/babel-cli/bin/babel-node.js index.js",
+    "test": "node ./node_modules/mocha/bin/mocha --compilers js:babel-register --recursive ./tests/*.spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HanGangHee/STORIEGE_API.git"
+  },
+  "author": "Han Gang Hee",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HanGangHee/STORIEGE_API/issues"
+  },
+  "homepage": "https://github.com/HanGangHee/STORIEGE_API#readme",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-node6": "^11.0.0",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "express": "^4.16.3",
+    "mocha": "^5.2.0",
+    "supertest": "^3.1.0"
+  }
+}
