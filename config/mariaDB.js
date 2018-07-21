@@ -1,13 +1,13 @@
 import mysql from 'mysql'
-import secret from '../credential'
-exports.dbConnect = function(){
-    try {
-        var db = mysql.createConnection(secret)
-        db.connect();
-        console.log("mariaDB connect success!")
-    }
-    catch(e) {
-        console.error(e.stack)
-    }
-    return db
+import dbConfig from '../credential'
+
+let db
+try {
+    db = mysql.createPool(dbConfig)
+    console.log("mariaDB pool create!")
 }
+catch(e) {
+    console.error("mariaDb pool create fail  !!!!")
+}
+
+module.exports = db

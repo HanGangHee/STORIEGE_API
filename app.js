@@ -1,19 +1,19 @@
 import express from 'express';
-import dbConn from './config/mariaDB'
+import bodyParser from 'body-parser'
+import index from './router/index'
 
-var db = dbConn.dbConnect()
-const app = express();
+const app = express()
 
 module.exports = app
 
-// app.use(express.json())
-// app.use(express.urlencoded({extended: false}))
-app.get('/', (req, res) => {
-    console.log('GET / request arrive')
-    res.send('Hello World');
-});
 
-var port = process.env.port || 3000
+app.use(express.static('public'))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended:true}))
+app.use(index)
+
+
+const port = process.env.port || 3000
 
 if(!module.parent){
     app.listen(port)
@@ -23,21 +23,19 @@ console.log("Application started. Listening on port:" + port)
 
 
 
-app.get('/1', function (req, res) {
-    db.query('SELECT * FROM user', (err, rows, fields) => {
-        if(err) throw err
-        let result
-        console.log(JSON.stringify(rows))
-        result = JSON.stringify(rows[0])
-        res.send(result)
-    })
-    // res.type('text/plain')
-    // res.send(result)
-})
-app.get('/2', function (req, res) {
-    res.type('text/plain')
-    res.send("한강희's  /2")
-})
+// app.get('/1', function (req, res) {
+//     db.query('SELECT * FROM user', (err, rows, fields) => {
+//         if(err) throw err
+//         let result
+//         console.log(JSON.stringify(rows))
+//         result = JSON.stringify(rows[0])
+//         res.send(result)
+//     })
+// })
+// app.get('/2', function (req, res) {
+//     res.type('text/plain')
+//     res.send("한강희's  /2  change")
+// })
 //
 // app.use(function (req, res) {
 //     res.status(404)

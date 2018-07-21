@@ -19,10 +19,10 @@ suite('GET /', () => {
     })
 })
 
-suite('GET /1', () => {
+suite('GET /user/login', () => {
     test('should respond with text message user "gksrkdgml"', (done) => {
         request(app.listen())
-            .get('/1')
+            .get('/user/login')
             .expect(200)
             .end((err, res) => {
                 if(err){
