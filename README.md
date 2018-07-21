@@ -1,14 +1,14 @@
 # STORIEGE_API
 
-### STORIEGE 란 ?
+### 1. STORIEGE 란 ?
 
 ##### Story + Storage 의 합성어
 
-### 목표
+### 2. 목표
 
 ##### **개인 WIKI** +  **정보 공유**
 
-### 개발 환경
+### 3. 개발 환경
 
 * MariaDB
 
@@ -21,3 +21,7 @@
 * Test Code: Mocha + Chai
 
 * 배포 : NAVER CLOUD SERVER
+
+### 4. 주의 사항
+
+* credential.js 는 보안 문제상 .gitignore 상태, 별도의 credential.js 파일이 필요. (DB connection ) 
