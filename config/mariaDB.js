@@ -1,5 +1,5 @@
 import mysql from 'mysql'
-import dbConfig from '../credential'
+import {dbConfig} from '../credential'
 
 let db
 try {
@@ -7,7 +7,7 @@ try {
     console.log("mariaDB pool create!")
 }
 catch(e) {
-    console.error("mariaDb pool create fail  !!!!")
+    console.error("mariaDB pool create fail  !!!!")
 }
 
 module.exports = db
