@@ -39,7 +39,6 @@ exports.login = (req, res) => {
     }
 
     const createToken = (user) => {
-        console.log("user " + user.userID)
         return jwt.sign({user}, SECRET, {
             algorithm: 'HS256',
             expiresIn: 60 * 60 * 24 * 7
