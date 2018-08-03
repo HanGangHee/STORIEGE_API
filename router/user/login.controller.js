@@ -7,7 +7,7 @@ POST /user/auth/
 }
  */
 import jwt from 'jsonwebtoken'
-import db from "../../config/mariaDB"
+import mariaDB from "../../config/mariaDB"
 
 exports.login = (req, res) => {
     if(!req.body){
@@ -49,10 +49,9 @@ exports.login = (req, res) => {
             message:'logged in successfully',
             token
         })
-
     }
     const onError = (error) => {
-        console.log(error)
+        console.error(error)
         res.status(409).json({
             message : 'error'
         })
@@ -60,7 +59,7 @@ exports.login = (req, res) => {
 
 
     const auth = new Promise((resolve, reject) => {
-            db.getConnection((err, connection) => {
+        mariaDB.getConnection((err, connection) => {
                 if(err){
                     reject(err)
                     return

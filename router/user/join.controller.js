@@ -7,7 +7,7 @@ POST /user/join
     sex
 }
  */
-import db from "../../config/mariaDB"
+import mariaDB from "../../config/mariaDB"
 
 exports.join = (req, res) => {
     if(req.body === undefined){
@@ -42,6 +42,7 @@ exports.join = (req, res) => {
     }
 
     const onError = (error) => {
+        console.error(error)
         res.status(409).json({
                 message : 'error'
             })
@@ -49,7 +50,7 @@ exports.join = (req, res) => {
 
     const join = new Promise(
         (resolve, reject) => {
-            db.getConnection((err, connection) => {
+            mariaDB.getConnection((err, connection) => {
                 if(err){
                     reject(err)
                     return
