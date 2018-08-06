@@ -3,7 +3,7 @@ import {mariaDB_config} from '../credential'
 
 let db
 try {
-    db = mysql.createPool(dbConfig)
+    db = mysql.createPool(mariaDB_config)
     console.log("mariaDB pool create!")
 }
 catch(e) {
