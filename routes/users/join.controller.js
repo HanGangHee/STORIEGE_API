@@ -1,5 +1,5 @@
 /*
-POST /user/join
+POST /users/join
 {
     userID
     pwd
@@ -11,7 +11,7 @@ import mariaDB from "../../config/mariaDB"
 
 exports.join = (req, res) => {
     if(req.body === undefined){
-        console.log("[POST /user/join] req.body is Empty")
+        console.log("[POST /users/join] req.body is Empty")
         return
     }
     const {userID, pwd, name, sex} = req.body

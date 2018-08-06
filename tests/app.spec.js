@@ -19,10 +19,10 @@ suite('GET /', () => {
     })
 })
 
-suite('POST /user/login', () => {
+suite('POST /users/login', () => {
     test('should respond with text message  "logged in successfully"', (done) => {
         request(app.listen())
-            .post('/user/login')
+            .post('/users/login')
             .send({ userID: "test", pwd: "1234"})
             .expect(200)
             .end((err, res) => {
@@ -42,11 +42,11 @@ suite('POST /user/login', () => {
 
 
 
-suite('GET /user/check', () => {
+suite('GET /users/check', () => {
     const getToken = new Promise(
         (resolve, reject) => {
             request(app.listen())
-                .post('/user/login')
+                .post('/users/login')
                 .send({ userID: "test", pwd: "1234"})
                 .expect(200)
                 .end((err, res) => {
@@ -58,7 +58,7 @@ suite('GET /user/check', () => {
                 })
         }
     )
-    test('should respond with user Data', (done) => {
+    test('should respond with users Data', (done) => {
         getToken.then(token => {
             let url = `/user/check/?token=${token}`
             console.log(url)
@@ -80,10 +80,10 @@ suite('GET /user/check', () => {
 
 })
 //
-// suite('GET /user/join', () => {
+// suite('GET /users/join', () => {
 //     test('should respond with text message "ok"', (done) => {
 //         request(app.listen())
-//             .post('/user/join')
+//             .post('/users/join')
 //             .send({ userID: "test6", pwd: "1234", name: "조잔형", sex:"남"})
 //             .expect(200)
 //             .end((err, res) => {

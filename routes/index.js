@@ -1,5 +1,5 @@
 import express from 'express'
-import user from './user/user'
+import users from './users/users'
 const router = express.Router()
 
 
@@ -9,6 +9,6 @@ router.get('/', (req, res) => {
 })
 
 
-router.use('/user', user)
+router.use('/users', users)
 
 module.exports = router

@@ -1,6 +1,6 @@
 
 /*
-POST /user/auth/
+POST /users/auth/
 {
     userID,
     pwd,

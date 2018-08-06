@@ -8,7 +8,7 @@ import authMiddleware from '../../middlewares/auth'
 const router = express.Router()
 
 router.get('/', (req, res) => {
-    console.log("GET /user ALIVE")
+    console.log("GET /users ALIVE")
     res.send("User Page is working")
 })
 
