@@ -26,4 +26,4 @@
 
 ### 4. 주의 사항
 
-* credential.js 는 보안 문제상 .gitignore 상태, 별도의 credential.js 파일이 필요. (DB connection ) 
+* config.js 는 보안 문제상 .gitignore 상태,  config.js 내용: (DB config, JWT ...)
