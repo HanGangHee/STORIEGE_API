@@ -18,7 +18,6 @@ const authMiddleware = (req, res, next) => {
                 resolve(decoded)
             })
         }
-
     )
 
     const onError = (error) => {

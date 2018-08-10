@@ -8,6 +8,7 @@ POST /users/auth/
  */
 import jwt from 'jsonwebtoken'
 import mariaDB from "../../models/mariaDB"
+import bcrypt from 'bcrypt-nodejs'
 
 exports.login = (req, res) => {
     if(!req.body){
@@ -16,24 +17,34 @@ exports.login = (req, res) => {
         })
         return
     }
-    const {userID, pwd} = req.body
+    const {id, pwd} = req.body
+    console.log("id" + " pwd " ,id, pwd)
     const SECRET = req.app.get('jwt-secret')
 
     const checkUser = (connection) => {
-        let sql = `select * from user where userID="${userID}" AND pwd="${pwd}"`
         return new Promise(
             (resolve, reject) => {
-                connection.query(sql, (err, rows) => {
+                let sql = `select * from users where id=? limit 1`
+                connection.query(sql, [id],  (err, rows) => {
                     if(err){
                         reject('Query error')
                     }
                     if(rows.length === 0){
                         reject('Login failed !')
                     }
-                    let user = rows[0]
-                    return resolve(user)
+                    let hash = rows[0].pwd
+                    bcrypt.compare(pwd, hash, function(err, res) { // "keyword"와 hash(해싱된 코드)를 비교하여 같으면 true 아니면 false를 반환합니다
+                        if(err || !res){
+                            reject('fail')
+                            return
+                        }
+                        let user = rows[0]
+                        delete user.pwd
+                        console.log(user)
+                        resolve(user)
+                        connection.release //mariadb connection pool에 release
+                    })
                 })
-                connection.release //mariadb connection pool에 release
             }
         )
     }
@@ -46,7 +57,7 @@ exports.login = (req, res) => {
     }
     const respond = (token) => {
         res.json({
-            message:'logged in successfully',
+            message:'ok',
             token
         })
     }

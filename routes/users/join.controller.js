@@ -8,43 +8,51 @@ POST /users/join
 }
  */
 import mariaDB from "../../models/mariaDB"
+import bcrypt from 'bcrypt-nodejs'
 
 exports.join = (req, res) => {
     if(req.body === undefined){
         console.log("[POST /users/join] req.body is Empty")
         return
     }
-    const {userID, pwd, name, sex} = req.body
+    const {id, pwd, nickname, age, sex, thema} = req.body
 
     const is_duplicated = (connection) => {
-        let sql = `select userID from user where userID='${req.body.userID}'`
-        connection.query(sql, (err, rows) => {
+        let sql = `select id from users where id=? limit 1`
+        connection.query(sql, [id], (err, rows) => {
             console.log(rows[0])
-            if(err){
-                throw new Error('query error')
-            }
-            if(rows.length !== 0){
-                throw new Error('userID exists')
+            if(err || rows.length !== 0){
+                throw err
             }
         })
         return connection
     }
 
     const insert = (connection) => {
-        let sql = `insert into user values('${userID}', '${pwd}', '${name}', '${sex}')`
-        connection.query(sql, (err, rows) => {
-            if(err){
-                throw new Error('Insert fail !!!')
-            }
-        })
-        connection.release // connection pool에 release
-        res.json({message : 'ok'})
+        return new Promise (
+            (resolve, reject) => {
+                bcrypt.hash(pwd, null, null, function(err, hash) {
+                    var sql = {id, pwd :hash, nickname, age, sex, thema} // 입력받은 평문을 hash로 바꿔서 넣어준다
+                    console.log(hash)
+                    connection.query('insert into users set ?', sql, function (err, rows) {
+                        if(err){
+                            reject('fail')
+                            return
+                        }
+                        resolve('ok')
+                        connection.release // connection pool에 release
+                    })
+                })
+            })
+    }
+    const result = (message) => {
+        res.json({message})
     }
 
     const onError = (error) => {
         console.error(error)
         res.status(409).json({
-                message : 'error'
+                message : error
             })
     }
 
@@ -62,5 +70,6 @@ exports.join = (req, res) => {
 
     join.then(is_duplicated)
         .then(insert)
+        .then(result)
         .catch(onError)
 }
