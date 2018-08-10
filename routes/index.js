@@ -1,5 +1,6 @@
 import express from 'express'
 import users from './users/users'
+import wikis from './wikis/wikis'
 const router = express.Router()
 
 
@@ -10,5 +11,6 @@ router.get('/', (req, res) => {
 
 
 router.use('/users', users)
+router.use('/wikis', wikis)
 
 module.exports = router

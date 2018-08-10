@@ -1,12 +1,25 @@
 import mongoose from 'mongoose'
 import {mongoDB_config} from '../config/config'
+import wikis from '../schemas/wikis'
 
-//connect to mongodb server
-var db = mongoose.connection
-db.on('error', console.error)
-db.once('open', () => {
-    console.log('Connected to mongod server')
-})
-let {host, port, database} = mongoDB_config
-let url = 'mongodb://' + host + ':' + port + '/' + database
-mongoose.connect(url)
+module.exports = () => {
+    let {user, pwd, host, port, database} = mongoDB_config
+    let url = 'mongodb://' + user + ":" + pwd + "@" + host + ':' + port + '/admin'
+    const connect = () => {
+        mongoose.connect(url, {
+            dbName: database,
+            useNewUrlParser : true
+        }, (err) => {
+            if (err) console.error('MongoDB connection fail!')
+            else console.log('MongoDB connection success!')
+        })
+    }
+    connect()
+    mongoose.connection.on('error', (error) => {
+        console.error('MongoDB connection fail!')
+    })
+    mongoose.connection.on('disconnected', () => {
+        console.error("MongoDB disconnected, 재연결 시도")
+        connect()
+    })
+}

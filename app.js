@@ -4,14 +4,14 @@ import morgan from 'morgan'
 
 
 import index from './routes/index'
-import {JWT} from './credential'
+import {JWT} from './config/config'
+import mongoDB_connect from './models/mongoDB'
 
 const app = express()
 
 module.exports = app
 
-
-
+mongoDB_connect()
 // JWT KEY SET
 app.set('jwt-secret', JWT.secret)
 
