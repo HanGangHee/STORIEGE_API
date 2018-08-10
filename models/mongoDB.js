@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import {mongoDB_config} from '../credential'
+import {mongoDB_config} from '../config/config'
 
 //connect to mongodb server
 var db = mongoose.connection

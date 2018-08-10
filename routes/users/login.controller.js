@@ -7,7 +7,7 @@ POST /users/auth/
 }
  */
 import jwt from 'jsonwebtoken'
-import mariaDB from "../../config/mariaDB"
+import mariaDB from "../../models/mariaDB"
 
 exports.login = (req, res) => {
     if(!req.body){

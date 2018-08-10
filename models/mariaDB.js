@@ -1,5 +1,5 @@
 import mysql from 'mysql'
-import {mariaDB_config} from '../credential'
+import {mariaDB_config} from '../config/config'
 
 let db
 try {

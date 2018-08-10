@@ -7,7 +7,7 @@ POST /users/join
     sex
 }
  */
-import mariaDB from "../../config/mariaDB"
+import mariaDB from "../../models/mariaDB"
 
 exports.join = (req, res) => {
     if(req.body === undefined){
