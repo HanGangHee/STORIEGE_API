@@ -10,9 +10,11 @@
 
 ### 3. 개발 환경
 
+* Node Js : ES6
+
 * MariaDB
 
-* Node Js : ES6
+* MongoDB
 
 * NginX
 
