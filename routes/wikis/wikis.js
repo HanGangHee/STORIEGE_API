@@ -1,8 +1,8 @@
 
-import express from 'express'
+import {Router} from 'express'
 import wikis from '../../schemas/wikis'
 
-const router = express.Router()
+const router = Router()
 
 router.get('/', (req, res) => {
     console.log("GET /wikis ALIVE")

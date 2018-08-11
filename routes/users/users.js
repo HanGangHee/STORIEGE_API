@@ -1,11 +1,11 @@
 
-import express from 'express'
+import {Router} from 'express'
 
 import {login} from './login.controller'
 import {join} from './join.controller'
 import {check} from './check.controller'
 import authMiddleware from '../../middlewares/auth'
-const router = express.Router()
+const router = Router()
 
 router.get('/', (req, res) => {
     console.log("GET /users ALIVE")
