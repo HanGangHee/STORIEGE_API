@@ -1,38 +1,23 @@
 import mongoose from 'mongoose'
 const Schema = mongoose.Schema
-const {Types: ObjectId} = Schema
-const wikisSchema = new Schema (
+const commentsSchema = new Schema (
     {
-        //version: Number,
-        title : {
-            type:String,
-            required: true,
-        },
-        content : {
-            type: String
-        },
-        write_time: {
-            type: Date,
-            default: Date.now()
-        },
-        user_id: {
-            type: String
-        },
-        parent_id : {
-            type: ObjectId
-        },
-        likes : {
-            type: Number
-        },
-        dislikes : {
-            type: Number
-        },
-        tags : {
-            type: Array
-        },
-        // comment : {
-        //
-        // }
+        comments:[
+            {
+                commenter:{
+                  type: String,
+                  required : true
+                },
+                comment:{
+                  type: String,
+                  required: true,
+                },
+                createdAt: {
+                    type: Date,
+                    default: Date.now
+                }
+            }
+        ]
     }
 )
-module.exports = mongoose.model('wikis',wikisSchema)
+module.exports = mongoose.model('comments',commentsSchema)
