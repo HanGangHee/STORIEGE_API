@@ -7,7 +7,7 @@ POST /users/join
     sex
 }
  */
-import mariaDB from "../../models/mariaDB"
+import mariaDB from "../../services/mariaDB"
 import bcrypt from 'bcrypt-nodejs'
 
 exports.join = (req, res) => {

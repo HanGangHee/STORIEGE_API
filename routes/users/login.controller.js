@@ -7,7 +7,7 @@ POST /users/auth/
 }
  */
 import jwt from 'jsonwebtoken'
-import mariaDB from "../../models/mariaDB"
+import mariaDB from "../../services/mariaDB"
 import bcrypt from 'bcrypt-nodejs'
 
 exports.login = (req, res) => {
