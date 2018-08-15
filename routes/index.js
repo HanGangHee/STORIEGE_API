@@ -1,6 +1,6 @@
 import {Router} from 'express'
-import users from './users/users'
-import wikis from './wikis/wikis'
+import auth from './auth/auth'
+import api from './api/api'
 const router = Router()
 
 
@@ -9,8 +9,7 @@ router.get('/', (req, res) => {
     res.send('Hello World')
 })
 
-
-router.use('/users', users)
-router.use('/wikis', wikis)
+router.use('/auth', auth)
+router.use('/api', api)
 
 module.exports = router

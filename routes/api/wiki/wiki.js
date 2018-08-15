@@ -3,17 +3,17 @@ import {Router} from 'express'
 const router = Router()
 
 router.get('/', (req, res) => {
-    console.log("GET /wikis ALIVE")
-    // wikis.find()
-    //     .then((wikis) => {
-    //         console.dir(wikis)
-    //         console.log(wikis[0])
+    console.log("GET /api/wiki ALIVE")
+    // wiki.find()
+    //     .then((wiki) => {
+    //         console.dir(wiki)
+    //         console.log(wiki[0])
     //     })
     //     .catch((error) => {
     //         console.error(error)
     //         next(error)
     //     })
-    res.send("Wikis Page is working")
+    res.send("api/wiki Page is working")
 })
 
 module.exports = router

@@ -1,5 +1,5 @@
 /*
-POST /users/join
+POST /auth/join
 {
     userID
     pwd
@@ -12,7 +12,7 @@ import bcrypt from 'bcrypt-nodejs'
 
 exports.join = (req, res) => {
     if(req.body === undefined){
-        console.log("[POST /users/join] req.body is Empty")
+        console.log("[POST /auth/join] req.body is Empty")
         return
     }
     const {id, pwd, nickname, age, sex, thema} = req.body
@@ -34,7 +34,7 @@ exports.join = (req, res) => {
                 bcrypt.hash(pwd, null, null, function(err, hash) {
                     var sql = {id, pwd :hash, nickname, age, sex, thema} // 입력받은 평문을 hash로 바꿔서 넣어준다
                     console.log(hash)
-                    connection.query('insert into users set ?', sql, function (err, rows) {
+                    connection.query('insert into auth set ?', sql, function (err, rows) {
                         if(err){
                             reject('fail')
                             return

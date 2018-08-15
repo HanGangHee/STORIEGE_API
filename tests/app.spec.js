@@ -19,10 +19,10 @@ suite('GET /', () => {
     })
 })
 
-suite('POST /users/login', () => {
+suite('POST /auth/login', () => {
     test('should respond with text message  "logged in successfully"', (done) => {
         request(app.listen())
-            .post('/users/login')
+            .post('/auth/login')
             .send({ id: "test", pwd: "sdfasdf"})
             .expect(200)
             .end((err, res) => {
@@ -42,11 +42,11 @@ suite('POST /users/login', () => {
 
 
 
-suite('GET /users/check', () => {
+suite('GET /auth/check', () => {
     const getToken = new Promise(
         (resolve, reject) => {
             request(app.listen())
-                .post('/users/login')
+                .post('/auth/login')
                 .send({ id: "test", pwd: "sdfasdf"})
                 .expect(200)
                 .end((err, res) => {
@@ -58,9 +58,9 @@ suite('GET /users/check', () => {
                 })
         }
     )
-    test('should respond with users Data', (done) => {
+    test('should respond with auth Data', (done) => {
         getToken.then(token => {
-            let url = `/users/check/?token=${token}`
+            let url = `/auth/check/?token=${token}`
             request(app.listen())
                 .get(url)
                 .expect(200)
@@ -80,10 +80,10 @@ suite('GET /users/check', () => {
 
 })
 //
-// suite('GET /users/join', () => {
+// suite('GET /auth/join', () => {
 //     test('should respond with text message "ok"', (done) => {
 //         request(app.listen())
-//             .post('/users/join')
+//             .post('/auth/join')
 //             .send({ id: "test", pwd: "sdfasdf", nickname: "한강희", age: 10, sex:"남", thema: 'A'})
 //             .expect(200)
 //             .end((err, res) => {
