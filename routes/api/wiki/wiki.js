@@ -1,20 +1,17 @@
 
 import {Router} from 'express'
+
+import createController from './create.controller'
+import deleteController from './delete.controller'
+import readController from './read.controller'
+import updateController from './update.controller'
+
 const router = Router()
 
-router.get('/', (req, res) => {
-    console.log("GET /api/wiki ALIVE")
-    // wiki.find()
-    //     .then((wiki) => {
-    //         console.dir(wiki)
-    //         console.log(wiki[0])
-    //     })
-    //     .catch((error) => {
-    //         console.error(error)
-    //         next(error)
-    //     })
-    res.send("api/wiki Page is working")
-})
+router.get('/', readController)
+router.put('/', updateController)
+router.post('/', createController)
+router.delete('/', deleteController)
 
 module.exports = router
 
