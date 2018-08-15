@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 const Schema = mongoose.Schema
 const commentsSchema = new Schema (
     {
+        wiki_num : Number,
         comments:[
             {
                 commenter:{
