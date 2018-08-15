@@ -5,7 +5,7 @@ import morgan from 'morgan'
 
 import index from './routes/index'
 import {JWT} from './config/config'
-import mongoDB_connect from './models/mongoDB'
+import mongoDB_connect from './services/mongoDB'
 
 const app = express()
 

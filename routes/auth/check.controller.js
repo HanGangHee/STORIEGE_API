@@ -1,6 +1,6 @@
 
 /*
-  GET /users/check
+  GET /auth/check
  */
 
 exports.check = (req, res) => {

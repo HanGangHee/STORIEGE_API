@@ -19,11 +19,11 @@ suite('GET /', () => {
     })
 })
 
-suite('POST /users/login', () => {
+suite('POST /auth/login', () => {
     test('should respond with text message  "logged in successfully"', (done) => {
         request(app.listen())
-            .post('/users/login')
-            .send({ userID: "test", pwd: "1234"})
+            .post('/auth/login')
+            .send({ id: "test", pwd: "sdfasdf"})
             .expect(200)
             .end((err, res) => {
                 if(err){
@@ -31,7 +31,7 @@ suite('POST /users/login', () => {
                     return
                 }
                 let result = res.body
-                expect(result['message']).to.equal('logged in successfully')
+                expect(result['message']).to.equal('ok')
                 // expect(result['pwd']).to.equal('1234')
                 // expect(result['name']).to.equal('한강희')
                 // expect(result['sex']).to.equal('남')
@@ -42,12 +42,12 @@ suite('POST /users/login', () => {
 
 
 
-suite('GET /users/check', () => {
+suite('GET /auth/check', () => {
     const getToken = new Promise(
         (resolve, reject) => {
             request(app.listen())
-                .post('/users/login')
-                .send({ userID: "test", pwd: "1234"})
+                .post('/auth/login')
+                .send({ id: "test", pwd: "sdfasdf"})
                 .expect(200)
                 .end((err, res) => {
                     if(err){
@@ -58,10 +58,9 @@ suite('GET /users/check', () => {
                 })
         }
     )
-    test('should respond with users Data', (done) => {
+    test('should respond with auth Data', (done) => {
         getToken.then(token => {
-            let url = `/user/check/?token=${token}`
-            console.log(url)
+            let url = `/auth/check/?token=${token}`
             request(app.listen())
                 .get(url)
                 .expect(200)
@@ -71,20 +70,21 @@ suite('GET /users/check', () => {
                         return
                     }
                     let result = res.body.user
-                    expect(result['userID']).to.equal('test')
-                    expect(result['pwd']).to.equal('1234')
+                    expect(result['id']).to.equal('test')
                     done()
                 })
+        }).catch(error => {
+            console.error("TEST ERROR !")
         })
     })
 
 })
 //
-// suite('GET /users/join', () => {
+// suite('GET /auth/join', () => {
 //     test('should respond with text message "ok"', (done) => {
 //         request(app.listen())
-//             .post('/users/join')
-//             .send({ userID: "test6", pwd: "1234", name: "조잔형", sex:"남"})
+//             .post('/auth/join')
+//             .send({ id: "test", pwd: "sdfasdf", nickname: "한강희", age: 10, sex:"남", thema: 'A'})
 //             .expect(200)
 //             .end((err, res) => {
 //                 if(err){
@@ -98,4 +98,4 @@ suite('GET /users/check', () => {
 //             })
 //     })
 // })
-
+//
