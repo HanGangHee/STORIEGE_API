@@ -31,10 +31,10 @@ exports.join = (req, res) => {
     const insert = (connection) => {
         return new Promise (
             (resolve, reject) => {
-                bcrypt.hash(pwd, null, null, function(err, hash) {
+                bcrypt.hash(pwd, null, null, (err, hash) => {
                     var sql = {id, pwd :hash, nickname, age, sex, thema} // 입력받은 평문을 hash로 바꿔서 넣어준다
                     console.log(hash)
-                    connection.query('insert into auth set ?', sql, function (err, rows) {
+                    connection.query('insert into users set ?', sql, function (err, rows) {
                         if(err){
                             reject('fail')
                             return

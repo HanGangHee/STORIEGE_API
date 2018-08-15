@@ -1,11 +1,13 @@
 
 import {Router} from 'express'
+
+import deleteController from './delete.controller'
+import updateController from './update.controller'
+
 const router = Router()
 
-router.get('/', (req, res) => {
-    console.log("GET /api/User ALIVE")
-    res.send("api/user Page is working")
-})
+router.put('/', updateController)
+router.delete('/', deleteController)
 
 module.exports = router
 
