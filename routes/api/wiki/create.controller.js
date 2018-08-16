@@ -33,25 +33,21 @@ module.exports = (req, res) => {
                         reject(err)
                         return
                     }
-                    console.log(rows[0])
+                    console.log("=========================" + rows[0] + "=========================")
                     resolve({num :rows[0].num});
                 })
             }
         )
     }
-    const updateOrInsertHashTag = (tag, num) => {
-            return new Promise (
-                (resolve, reject) => {
-                    Hashtag.updateOne({tag}, {$set: {$push : {wikis: num}}}, {upsert: true})
-                }
-            )
-        }
+
     const insertHashtag = (num) => {
         if(tags === null){
             return 'ok'
         }
         let hashtags = tags.match(/#[^#\s,;]+/gm).slice(1).map((s) => s.toLowerCase())
-        return Promise.all(hashtags.map(hashtag => updateOrInsertHashTag(hashtag, num)))
+        return Promise.all(hashtags.map(
+            hashtag => Hashtag.updateOne({_id : hashtag}, {$set: {$push : {wikis: num}}}, {upsert: true})
+        ))
     }
     const respond = (token) => {
         res.json({
