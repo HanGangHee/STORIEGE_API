@@ -37,7 +37,7 @@ module.exports = (req, res) => {
             )
         }
 
-        const result = (message) => {
+        const respond = (message) => {
             res.json({message})
         }
 
@@ -50,6 +50,6 @@ module.exports = (req, res) => {
 
         dbConnection.
             then(deleteUser).
-            then(result).
+            then(respond).
             catch(onError)
 }

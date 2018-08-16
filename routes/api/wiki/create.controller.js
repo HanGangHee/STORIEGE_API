@@ -1,4 +1,5 @@
 import mariaDB from '../../../services/mariaDB'
+import Hashtag from '../../../schemas/hashtag'
 
 /*
 Post /api/wiki
@@ -7,6 +8,11 @@ receive : wiki_info
  */
 
 module.exports = (req, res) => {
+    if(!req.body){
+        res.json({message: "Wiki_Info Empty"})
+        return
+    }
+    let {title, content, user_id, parent_num, tags} = req.body
     const dbConnection = new Promise(
         (resolve, reject) => {
             mariaDB.getConnection((err, connection) => {
@@ -18,4 +24,52 @@ module.exports = (req, res) => {
             })
         }
     )
+    const insertWiki = (connection) => {
+        let sql = "insert into wikis(title, content, user_id, parent_num, tags) values(?, ?, ?, ?, ?)"
+        return new Promise(
+            (resolve, reject) => {
+                connection(sql, [title, content, user_id, parent_num, tags], (err, rows) => {
+                    if(err){
+                        reject(err)
+                        return
+                    }
+                    console.log(rows[0])
+                    resolve({num :rows[0].num});
+                })
+            }
+        )
+    }
+    const updateOrInsertHashTag = (tag, num) => {
+            return new Promise (
+                (resolve, reject) => {
+                    Hashtag.updateOne({tag}, {$set: {$push : {wikis: num}}}, {upsert: true})
+                }
+            )
+        }
+    const insertHashtag = (num) => {
+        if(tags === null){
+            return 'ok'
+        }
+        let hashtags = tags.match(/#[^#\s,;]+/gm).slice(1).map((s) => s.toLowerCase())
+        return Promise.all(hashtags.map(hashtag => updateOrInsertHashTag(hashtag, num)))
+    }
+    const respond = (token) => {
+        res.json({
+            message:'ok',
+            token
+        })
+    }
+    const onError = (error) => {
+        console.error(error)
+        res.status(409).json({
+            message : 'error'
+        })
+    }
+
+    dbConnection
+        .then(insertWiki)
+        .then(insertHashtag)
+        .then(respond)
+        .catch(onError)
+
 }
