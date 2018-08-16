@@ -13,6 +13,7 @@ module.exports = (req, res) => {
         return
     }
     let {title, content, user_id, parent_num, tags} = req.body
+
     const dbConnection = new Promise(
         (resolve, reject) => {
             mariaDB.getConnection((err, connection) => {
@@ -28,25 +29,24 @@ module.exports = (req, res) => {
         let sql = "insert into wikis(title, content, user_id, parent_num, tags) values(?, ?, ?, ?, ?)"
         return new Promise(
             (resolve, reject) => {
-                connection(sql, [title, content, user_id, parent_num, tags], (err, rows) => {
+                connection.query(sql, [title, content, user_id, parent_num, tags], (err, row) => {
                     if(err){
                         reject(err)
                         return
                     }
-                    console.log("=========================" + rows[0] + "=========================")
-                    resolve({num :rows[0].num});
+                    resolve({num :row.insertId});
                 })
             }
         )
     }
 
     const insertHashtag = (num) => {
-        if(tags === null){
+        if(tags === null){  //해시태그를 설정하지 않으면 검색이 되지 않음
             return 'ok'
         }
-        let hashtags = tags.match(/#[^#\s,;]+/gm).slice(1).map((s) => s.toLowerCase())
+        let hashtags = tags.match(/#[^#\s,;]+/gm).map((s) => s.slice(1).toLowerCase())
         return Promise.all(hashtags.map(
-            hashtag => Hashtag.updateOne({_id : hashtag}, {$set: {$push : {wikis: num}}}, {upsert: true})
+            hashtag => Hashtag.updateOne({_id : hashtag}, {$push : {wikis: num}}, {upsert: true})
         ))
     }
     const respond = (token) => {
@@ -67,5 +67,4 @@ module.exports = (req, res) => {
         .then(insertHashtag)
         .then(respond)
         .catch(onError)
-
 }
