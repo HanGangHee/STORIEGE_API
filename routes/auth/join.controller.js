@@ -1,7 +1,7 @@
 /*
 POST /auth/join
 {
-    userID
+    id
     pwd
     name
     sex

@@ -15,9 +15,7 @@ router.get('/', (req, res) => {
 
 router.post('/join', join)
 router.post('/login', login)
-
-router.use('/check', authMiddleware)
-router.get('/check', check)
+router.get('/check', authMiddleware, check)
 
 module.exports = router
 

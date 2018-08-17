@@ -18,7 +18,6 @@ exports.login = (req, res) => {
         return
     }
     const {id, pwd} = req.body
-    console.log("id" + " pwd " ,id, pwd)
     const SECRET = req.app.get('jwt-secret')
 
     const checkUser = (connection) => {
@@ -30,7 +29,7 @@ exports.login = (req, res) => {
                         reject('Query error')
                     }
                     if(rows.length === 0){
-                        reject('Login failed !')
+                        reject('ID is not founded !')
                     }
                     let hash = rows[0].pwd
                     bcrypt.compare(pwd, hash, function(err, res) { // "keyword"와 hash(해싱된 코드)를 비교하여 같으면 true 아니면 false를 반환합니다
@@ -40,7 +39,6 @@ exports.login = (req, res) => {
                         }
                         let user = rows[0]
                         delete user.pwd
-                        console.log(user)
                         resolve(user)
                         connection.release //mariadb connection pool에 release
                     })
