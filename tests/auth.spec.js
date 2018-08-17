@@ -43,7 +43,7 @@ suite('GET /auth/check', () => {
     )
     test('should respond with auth Data', (done) => {
         getToken.then(token => {
-            let url = `/auth/check/?token=${token}`
+            let url = `/auth/check?${token}`
             request(app.listen())
                 .get(url)
                 .expect(200)
