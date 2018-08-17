@@ -23,7 +23,22 @@ module.exports = (req, res) => {
             }
         )
         const deleteUser = (connection) => {
-            let sql = `delete * from users where id = ?`
+            let sql = `delete from users where id = ?`
+            return new Promise(
+                (resolve, reject) => {
+                    connection.query(sql, [user_id], (err, rows) => {
+                        if(err){
+                            reject(err)
+                            return
+                        }
+                        resolve(connection)
+                    })
+                }
+            )
+        }
+
+        const deleteWikis = (connection) => {
+            let sql = `delete from wikis where user_id = ?`
             return new Promise(
                 (resolve, reject) => {
                     connection.query(sql, [user_id], (err, rows) => {
@@ -48,8 +63,9 @@ module.exports = (req, res) => {
             })
         }
 
-        dbConnection.
-            then(deleteUser).
-            then(respond).
-            catch(onError)
+        dbConnection
+            .then(deleteUser)
+            .then(deleteWikis)
+            .then(respond)
+            .catch(onError)
 }

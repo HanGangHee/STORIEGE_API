@@ -10,7 +10,7 @@ module.exports = (req, res) => {
         res.json({message: "User Info Empty !"})
         return
     }
-    let {pwd, nickname, age, sex, thema} = req.body
+    let {id, pwd, nickname, age, sex, thema} = req.body
 
     const dbConnection = new Promise(
         (resolve, reject) => {
@@ -23,30 +23,30 @@ module.exports = (req, res) => {
             })
         }
     )
-    const checkUser = (connection) => {
-        let sql = `select * from users where nickname = ?`
-        return new Promise(
-            (resolve, reject) => {
-                connection.query(sql, [id, nickname], (err, rows) => {
-                    if(err){
-                        reject(err)
-                        return
-                    }
-                    if(rows){
-                        reject('NickName Exists')
-                        return
-                    }
-                    resolve(connection)
-                })
-            }
-        )
-    }
+    // const checkUser = (connection) => {
+    //     let sql = `select nickname from users where id = ?`
+    //     return new Promise(
+    //         (resolve, reject) => {
+    //             connection.query(sql, [id], (err, rows) => {
+    //                 if(err){
+    //                     reject(err)
+    //                     return
+    //                 }
+    //                 if(rows){
+    //                     reject('NickName Exists')
+    //                     return
+    //                 }
+    //                 resolve(connection)
+    //             })
+    //         }
+    //     )
+    // }
     const updateUser = (connection) => {
-        let sql = `update users set id = ?, pwd = ?, nickname = ?, age = ?, sex = ?, thema = ? where id = ?`
+        let sql = `update users set pwd = ?, age = ?, sex = ?, thema = ? where id = ?`
         return new Promise(
             (resolve, reject) => {
                 bcrypt.hash(pwd, null, null, (err, hash) => {
-                    connection.query(sql, [id, hash, nickname, age, sex, thema, id], (err, rows) => {
+                    connection.query(sql, [hash, age, sex, thema, id], (err, rows) => {
                         if(err){
                             reject(err)
                             return
@@ -69,9 +69,8 @@ module.exports = (req, res) => {
         })
     }
 
-    dbConnection.
-    then(updateUser).
-    then(checkUser).
-    then(respond).
-    catch(onError)
+    dbConnection
+        .then(updateUser)
+        .then(respond)
+        .catch(onError)
 }

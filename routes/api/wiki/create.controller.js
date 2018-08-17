@@ -26,7 +26,7 @@ module.exports = (req, res) => {
         }
     )
     const insertWiki = (connection) => {
-        let sql = "insert into wikis(title, content, user_id, parent_num, tags) values(?, ?, ?, ?, ?)"
+        let sql = "insert into wikis(title, content, user_id, parent_num) values(?, ?, ?, ?, ?)"
         return new Promise(
             (resolve, reject) => {
                 connection.query(sql, [title, content, user_id, parent_num, tags], (err, row) => {
@@ -47,13 +47,10 @@ module.exports = (req, res) => {
         let hashtags = tags.match(/#[^#\s,;]+/gm).map((s) => s.slice(1).toLowerCase())
         return Promise.all(hashtags.map(
             hashtag => Hashtag.updateOne({_id : hashtag}, {$push : {wikis: num}}, {upsert: true})
-        ))
+        )).then(v => 'ok')
     }
-    const respond = (token) => {
-        res.json({
-            message:'ok',
-            token
-        })
+    const respond = (message) => {
+        res.json({message})
     }
     const onError = (error) => {
         console.error(error)
