@@ -1,22 +1,21 @@
 import mariaDB from '../../../services/mariaDB'
 
 /*
-Put /api/wiki
+Put /api/wiki/title/:num
 receive : {
-    num
-    title
-    content
-    user_id
-    parent_num
+    title:
+    user_id:
 }
 
  */
 
 module.exports = (req, res) => {
-    if(req.decoded.user.id != req.body.user_id){
+    if(req.decoded.user.id != req.body.user_id && req.body.parent_num){
         res.json({message : 'fail'})
         return
     }
+    let num = req.params.num
+    let {title} = req.body
     const dbConnection = new Promise(
         (resolve, reject) => {
             mariaDB.getConnection((err, connection) => {
@@ -28,30 +27,24 @@ module.exports = (req, res) => {
             })
         }
     )
-    const upDateWiki = (connection) => {
+    const updateWiki = (connection) => {
         return new Promise(
             (resolve, reject) => {
-                let sql
-                if(num == 0){
-                    sql = `select title from wikis where user_id = ? AND parent_num = ?`
-                }
-                else {
-                    sql = 'select * from wikis where user_id = ? AND num = ?'
-                }
-                connection.query(sql, [user_id, num], (err, data) => {
+                let sql = `update wikis set title = ? where num = ?`
+                connection.query(sql, [title, num], (err, data) => {
                     if(err){
                         reject(err)
                         return
                     }
-                    console.dir(data)
-                    resolve({connection, data})
+                    resolve('ok')
+                    connection.release
                 })
             }
         )
     }
 
-    const respond = (data) => {
-        res.json(data)
+    const respond = (message) => {
+        res.json({message})
     }
     const onError = (error) => {
         console.error(error)
@@ -61,6 +54,7 @@ module.exports = (req, res) => {
     }
 
     dbConnection
+        .then(updateWiki)
         .then(respond)
         .catch(onError)
 

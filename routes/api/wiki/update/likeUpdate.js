@@ -1,22 +1,21 @@
 import mariaDB from '../../../services/mariaDB'
 
 /*
-Put /api/wiki
+Put /api/wiki/like/:num
 receive : {
-    num
-    title
-    content
+    like     -1 or 1
     user_id
-    parent_num
 }
 
  */
 
 module.exports = (req, res) => {
-    if(req.decoded.user.id != req.body.user_id){
+    if(req.decoded.user.id != req.body.user_id && req.body.like){
         res.json({message : 'fail'})
         return
     }
+    let num = req.params.num
+    let {like} = req.body
     const dbConnection = new Promise(
         (resolve, reject) => {
             mariaDB.getConnection((err, connection) => {
@@ -25,33 +24,33 @@ module.exports = (req, res) => {
                     return
                 }
                 resolve(connection)
+                connection.release
             })
         }
     )
-    const upDateWiki = (connection) => {
+    const updateWiki = (connection) => {
         return new Promise(
             (resolve, reject) => {
                 let sql
-                if(num == 0){
-                    sql = `select title from wikis where user_id = ? AND parent_num = ?`
+                if(like == 1){
+                    sql = `update wikis set likes = likes + 1 where num = ?`
                 }
                 else {
-                    sql = 'select * from wikis where user_id = ? AND num = ?'
+                    sql = `update wikis set dislikes = dislikes + 1 where num = ?`
                 }
-                connection.query(sql, [user_id, num], (err, data) => {
+                connection.query(sql, [num], (err, data) => {
                     if(err){
                         reject(err)
                         return
                     }
-                    console.dir(data)
-                    resolve({connection, data})
+                    resolve('ok')
                 })
             }
         )
     }
 
-    const respond = (data) => {
-        res.json(data)
+    const respond = (message) => {
+        res.json({message})
     }
     const onError = (error) => {
         console.error(error)
@@ -61,6 +60,7 @@ module.exports = (req, res) => {
     }
 
     dbConnection
+        .then(updateWiki)
         .then(respond)
         .catch(onError)
 

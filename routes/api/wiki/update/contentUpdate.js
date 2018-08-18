@@ -1,22 +1,21 @@
 import mariaDB from '../../../services/mariaDB'
 
 /*
-Put /api/wiki
+Put /api/wiki/content/:num
 receive : {
-    num
-    title
     content
     user_id
-    parent_num
 }
 
  */
 
 module.exports = (req, res) => {
-    if(req.decoded.user.id != req.body.user_id){
+    if(req.decoded.user.id != req.body.user_id && req.body.content){
         res.json({message : 'fail'})
         return
     }
+    let num = req.params.num
+    let {content} = req.body
     const dbConnection = new Promise(
         (resolve, reject) => {
             mariaDB.getConnection((err, connection) => {
@@ -25,33 +24,27 @@ module.exports = (req, res) => {
                     return
                 }
                 resolve(connection)
+                connection.release
             })
         }
     )
-    const upDateWiki = (connection) => {
+    const updateWiki = (connection) => {
         return new Promise(
             (resolve, reject) => {
-                let sql
-                if(num == 0){
-                    sql = `select title from wikis where user_id = ? AND parent_num = ?`
-                }
-                else {
-                    sql = 'select * from wikis where user_id = ? AND num = ?'
-                }
-                connection.query(sql, [user_id, num], (err, data) => {
+                let sql = `update wikis set content = ? where num = ?`
+                connection.query(sql, [content, num], (err, data) => {
                     if(err){
                         reject(err)
                         return
                     }
-                    console.dir(data)
-                    resolve({connection, data})
+                    resolve('ok')
                 })
             }
         )
     }
 
-    const respond = (data) => {
-        res.json(data)
+    const respond = (message) => {
+        res.json({message})
     }
     const onError = (error) => {
         console.error(error)
@@ -61,6 +54,7 @@ module.exports = (req, res) => {
     }
 
     dbConnection
+        .then(updateWiki)
         .then(respond)
         .catch(onError)
 
