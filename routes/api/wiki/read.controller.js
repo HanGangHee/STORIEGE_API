@@ -67,7 +67,6 @@ module.exports = (req, res) => {
                 else {
                     sql = 'select * from wikis where user_id = ? AND num = ?'
                 }
-                console.log("sql :::::" + sql)
                 connection.query(sql, [user_id, num], (err, data) => {
                     if(err){
                         reject(err)
