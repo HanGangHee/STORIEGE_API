@@ -1,5 +1,6 @@
 import mariaDB from '../../../services/mariaDB'
 import bcrypt from 'bcrypt-nodejs'
+import jwt from "jsonwebtoken"
 /*
 PUT /api/user
 receive : user_info
@@ -51,15 +52,24 @@ module.exports = (req, res) => {
                             reject(err)
                             return
                         }
-                        resolve('ok')
+                        resolve({id, nickname, age, sex, thema})
                     })
                 })
             }
         )
     }
+    const createToken = (user) => {
+        return jwt.sign({user}, req.app.get('jwt-secret'), {
+            algorithm: 'HS256',
+            expiresIn: 60 * 60 * 24 * 7
+        })
+    }
 
-    const respond = (message) => {
-        res.json({message})
+    const respond = (token) => {
+        res.json({
+            message:'ok',
+            token
+        })
     }
 
     const onError = (error) => {
@@ -71,6 +81,7 @@ module.exports = (req, res) => {
 
     dbConnection
         .then(updateUser)
+        .then(createToken)
         .then(respond)
         .catch(onError)
 }

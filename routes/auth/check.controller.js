@@ -5,7 +5,7 @@
 
 exports.check = (req, res) => {
     res.json({
-        success : true,
+        message: 'ok',
         user : req.decoded.user
     })
 }

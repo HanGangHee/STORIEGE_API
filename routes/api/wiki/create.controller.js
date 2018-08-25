@@ -55,7 +55,7 @@ module.exports = (req, res) => {
     const onError = (error) => {
         console.error(error)
         res.status(409).json({
-            message : 'error'
+            message : error
         })
     }
 
